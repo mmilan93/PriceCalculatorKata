@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientC", "ClientC\ClientC.csproj", "{D386A6A4-DA5D-4121-91E2-9877172E639D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C87FFC3B-4613-46F4-9DBA-137D435AA4DC}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Core", "Core\Core.fsproj", "{07E407BA-B14D-4F42-8092-0BC2D7BB2A5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D386A6A4-DA5D-4121-91E2-9877172E639D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D386A6A4-DA5D-4121-91E2-9877172E639D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D386A6A4-DA5D-4121-91E2-9877172E639D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D386A6A4-DA5D-4121-91E2-9877172E639D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87FFC3B-4613-46F4-9DBA-137D435AA4DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87FFC3B-4613-46F4-9DBA-137D435AA4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87FFC3B-4613-46F4-9DBA-137D435AA4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87FFC3B-4613-46F4-9DBA-137D435AA4DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E407BA-B14D-4F42-8092-0BC2D7BB2A5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E407BA-B14D-4F42-8092-0BC2D7BB2A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E407BA-B14D-4F42-8092-0BC2D7BB2A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E407BA-B14D-4F42-8092-0BC2D7BB2A5F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B0495F03-2082-4030-A8FF-BDA425319C30}
+	EndGlobalSection
+EndGlobal
