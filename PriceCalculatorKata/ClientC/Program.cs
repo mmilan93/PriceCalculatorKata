@@ -7,8 +7,24 @@ namespace ClientC
     {
         static void Main(string[] args)
         {
-            Req01();
             Console.WriteLine("Hello World!");
+            int option = 0;
+            do
+            {
+                Console.WriteLine("Insert opton:");
+                if (!int.TryParse(Console.ReadLine(), out option))
+                    continue;
+
+                switch (option)
+                {
+                    case 1:
+                        Req01();
+                        break;
+                    default:
+                        Console.WriteLine("option is not existing!");
+                        break;
+                }
+            } while (option != -1);
         }
 
         static void Req01()

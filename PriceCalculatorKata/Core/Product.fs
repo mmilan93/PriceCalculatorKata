@@ -2,8 +2,6 @@
 
 module Product =
 
-    open Common
-
     type Name = Name of string
     type UPC = UPC of int
 

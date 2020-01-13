@@ -1,13 +1,11 @@
 ﻿namespace Core
 
 open System
+    
+type ProductPrice = private ProductPrice of decimal
 
-module Common =
+module ProductPrice =
+    let value (ProductPrice price) = price 
 
-    //[<Measure>]
-    //type usd
-
-    type ProductPrice = internal ProductPrice of decimal//<usd>
-
-    let createProductPrice (price: decimal) = 
+    let create (price: decimal) = 
         ProductPrice (Math.Round(price, 2))
