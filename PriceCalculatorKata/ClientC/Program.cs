@@ -13,7 +13,7 @@ namespace ClientC
             {
                 Console.WriteLine("Insert opton:");
                 if (!int.TryParse(Console.ReadLine(), out option))
-                    continue;
+                    break;
 
                 switch (option)
                 {
@@ -36,10 +36,13 @@ namespace ClientC
             Console.WriteLine("basePrice:");
             var basePrice = decimal.Parse(Console.ReadLine());
             Console.WriteLine("tax:");
-            var tax = decimal.Parse(Console.ReadLine());
+            var tax = int.Parse(Console.ReadLine());
+            Console.WriteLine("discount:");
+            var discount = int.Parse(Console.ReadLine());
 
-            var priceWithTax = new CalculateWithTaxUseCase().Calculate(name, upc, basePrice, tax);
-            Console.WriteLine($"Product price reported as ${basePrice} before tax and ${priceWithTax} after {tax}% tax");
+            var calculatedProductDto = new CalculateWithTaxUseCase().Calculate(name, upc, basePrice, tax, discount);
+            Console.WriteLine($"Tax amount = ${calculatedProductDto.TaxAmount}; Discount amount = ${calculatedProductDto.DiscountAmount}");
+            Console.WriteLine($"Price before = ${calculatedProductDto.BasePrice}, price after = ${calculatedProductDto.CalculatedPrice}");
         }
     }
 }

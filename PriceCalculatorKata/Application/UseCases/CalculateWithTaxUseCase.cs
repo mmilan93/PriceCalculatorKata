@@ -1,20 +1,27 @@
-﻿using Core;
+﻿using Application.Dtos;
+using Core;
 
 namespace Application.UseCases
 {
     public class CalculateWithTaxUseCase
     {
-        public decimal Calculate(string name, int upc, decimal productPrice, decimal tax)
+        public CalculatedProductDto Calculate(string name, int upc, decimal productPrice, int tax, int discount)
         {
             Say.hello("adasd");
-            var pr = new Product.Product(
+            var pr = new Product.ProductType(
                                         Product.Name.NewName(name),
                                         Product.UPC.NewUPC(upc),
                                         ProductPriceModule.create(productPrice));
-            var calculatedPrice = PriceCalculations.calculatePrice(
+            var priceCalculationDto = PriceCalculations.calculatePrice(
                                                         PriceCalculations.Tax.NewTax(tax),
-                                                        pr.basePrice);
-            return ProductPriceModule.value(calculatedPrice);
+                                                        PriceCalculations.Discount.NewDiscount(discount),
+                                                        pr);
+            return new CalculatedProductDto(priceCalculationDto.upc.Item,
+                                            name,
+                                            ProductPriceModule.value(priceCalculationDto.basePrice),
+                                            ProductPriceModule.value(priceCalculationDto.taxAmount),
+                                            ProductPriceModule.value(priceCalculationDto.discountAmount),
+                                            ProductPriceModule.value(priceCalculationDto.calculatedPrice));
         }
     }
 }

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Common.fs" />
-    <Compile Include="Product.fs" />
+    <Compile Include="DomainSimpleTypes.fs" />
+    <Compile Include="DomainCompoundTypes.fs" />
     <Compile Include="PriceCalculations.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
