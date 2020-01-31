@@ -10,7 +10,7 @@ namespace Application.Dtos
                                     string name,
                                     decimal basePrice,
                                     decimal taxAmount,
-                                    decimal discountAmount,
+                                    decimal? discountAmount,
                                     decimal calculatedPrice)
         {
             Upc = upc;
@@ -25,7 +25,7 @@ namespace Application.Dtos
         public string Name { get; }
         public decimal BasePrice { get; }
         public decimal TaxAmount { get; }
-        public decimal DiscountAmount { get; }
+        public decimal? DiscountAmount { get; }
         public decimal CalculatedPrice { get; }
     }
 }
