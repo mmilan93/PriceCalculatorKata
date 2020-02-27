@@ -6,28 +6,40 @@ namespace Application.UseCases
 {
     public class CalculateUseCase
     {
-        public CalculatedProductDto Calculate(string name, int upc, decimal productPrice, int tax, int? discount)
+        public CalculatedProductDto Calculate(string name, int upc, decimal productPrice, int tax, int? universalDiscount, UpcDiscountDto upcDiscount)
         {
-            var discountOption = discount.HasValue
-                                                    ? FSharpOption<PriceCalculations.Discount>.Some(PriceCalculations.Discount.NewDiscount(discount.Value))
+            var universalDiscountOption = universalDiscount.HasValue
+                                                    ? FSharpOption<PriceCalculations.Discount>.Some(PriceCalculations.Discount.NewDiscount(universalDiscount.Value))
                                                     : FSharpOption<PriceCalculations.Discount>.None;
+            var upcDiscountOption = upcDiscount != null
+                                                    ? FSharpOption<PriceCalculations.UpcDiscount>.Some(new PriceCalculations.UpcDiscount(
+                                                                                                                                PriceCalculations.Discount.NewDiscount(upcDiscount.Discount),
+                                                                                                                                ProductUpc.NewProductUpc(upcDiscount.Upc)))
+                                                    : FSharpOption<PriceCalculations.UpcDiscount>.None;
 
             Say.hello("from Say module");
-            var pr = new Product.ProductType(
-                                        Product.Name.NewName(name),
-                                        Product.UPC.NewUPC(upc),
-                                        ProductPriceModule.create(productPrice));
+            var pr = new Product(
+                            ProductName.NewProductName(name),
+                            ProductUpc.NewProductUpc(upc),
+                            ProductPriceModule.create(productPrice));
             var priceCalculationDto = PriceCalculations.calculatePrice(
                                                         PriceCalculations.Tax.NewTax(tax),
-                                                        discountOption,
+                                                        universalDiscountOption,
+                                                        upcDiscountOption,
                                                         pr);
 
             return new CalculatedProductDto(priceCalculationDto.upc.Item,
                                             name,
                                             ProductPriceModule.value(priceCalculationDto.basePrice),
                                             ProductPriceModule.value(priceCalculationDto.taxAmount),
-                                            FSharpOption<Core.ProductPrice>.get_IsSome(priceCalculationDto.discountAmount)
-                                                ? ProductPriceModule.value(priceCalculationDto.discountAmount.Value) as decimal?
+                                            FSharpOption<ProductPrice>.get_IsSome(priceCalculationDto.universalDiscountAmount)
+                                                ? ProductPriceModule.value(priceCalculationDto.universalDiscountAmount.Value) as decimal?
+                                                : null,
+                                            FSharpOption<ProductPrice>.get_IsSome(priceCalculationDto.upcDiscountAmount)
+                                                ? ProductPriceModule.value(priceCalculationDto.upcDiscountAmount.Value) as decimal?
+                                                : null,
+                                            FSharpOption<ProductPrice>.get_IsSome(priceCalculationDto.totalDiscountAmount)
+                                                ? ProductPriceModule.value(priceCalculationDto.totalDiscountAmount.Value) as decimal?
                                                 : null,
                                             ProductPriceModule.value(priceCalculationDto.calculatedPrice));
         }

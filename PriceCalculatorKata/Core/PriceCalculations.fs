@@ -4,12 +4,18 @@ module PriceCalculations =
 
     type Tax = Tax of int
     type Discount = Discount of int
+    type UpcDiscount = {
+        discount: Discount
+        upc: ProductUpc
+    }
     
     type PriceCalculationDto = {
-        upc: Product.UPC
+        upc: ProductUpc
         basePrice: ProductPrice
         taxAmount: ProductPrice
-        discountAmount: ProductPrice option
+        universalDiscountAmount: ProductPrice option
+        upcDiscountAmount: ProductPrice option
+        totalDiscountAmount: ProductPrice option
         calculatedPrice: ProductPrice
     }
 
@@ -17,7 +23,9 @@ module PriceCalculations =
         { upc = upc;
           basePrice = basePrice
           taxAmount = ProductPrice.create 0M 
-          discountAmount = None
+          universalDiscountAmount = None
+          upcDiscountAmount = None
+          totalDiscountAmount = None
           calculatedPrice = ProductPrice.create 0M }
 
     let applyPercentage percentage productPrice =
@@ -26,21 +34,44 @@ module PriceCalculations =
     let calculateTax (Tax tax) dto =
         { dto with taxAmount = applyPercentage tax dto.basePrice }
         
-    let calculateDiscount discount dto =
-        { dto with discountAmount = match discount with
-                                    | Some (Discount disc) -> Some (applyPercentage disc dto.basePrice)
-                                    | None -> None}
+    let calculateUniversalDiscount discount dto =
+        { dto with universalDiscountAmount = match discount with
+                                             | Some (Discount disc) -> Some (applyPercentage disc dto.basePrice)
+                                             | None -> None}
+
+    
+    let calculateUpcDiscount (upcDiscount: UpcDiscount option) dto =
+        { dto with upcDiscountAmount = match upcDiscount with
+                                       | Some disc -> 
+                                            let (Discount upcDiscountValue) = disc.discount
+                                            if disc.upc = dto.upc 
+                                                then Some (applyPercentage upcDiscountValue dto.basePrice) 
+                                                else None
+                                       | None -> None}
+
+    let calculateTotalDiscount dto =
+        { dto with totalDiscountAmount = match dto.universalDiscountAmount, dto.upcDiscountAmount with
+                                         | Some (ProductPrice universalDiscAmount), Some (ProductPrice upcDiscAmount) 
+                                            -> Some (ProductPrice (universalDiscAmount + upcDiscAmount))
+                                         | Some universalDiscAmount, None 
+                                            -> Some universalDiscAmount
+                                         | None, Some upcDiscAmount
+                                            -> Some upcDiscAmount
+                                         | None, None
+                                            -> None}
 
     let calculateFinalPrice dto =
-        let appliedDiscountAmount = match dto.discountAmount with
+        let totalDiscountAmount = match dto.totalDiscountAmount with
                                     | Some (ProductPrice amount) -> amount
                                     | None -> 0M
         { dto with calculatedPrice = ProductPrice.create (ProductPrice.value dto.basePrice
                                                           + ProductPrice.value dto.taxAmount
-                                                          - appliedDiscountAmount) }
+                                                          - totalDiscountAmount) }
 
-    let calculatePrice tax discount (product: Product.ProductType) =
+    let calculatePrice tax universalDiscount upcDiscount (product: Product) =
         initializePriceCalculationDto product.upc product.basePrice
             |> calculateTax tax
-            |> calculateDiscount discount
+            |> calculateUniversalDiscount universalDiscount
+            |> calculateUpcDiscount upcDiscount
+            |> calculateTotalDiscount
             |> calculateFinalPrice

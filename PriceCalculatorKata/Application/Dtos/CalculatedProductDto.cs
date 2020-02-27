@@ -10,14 +10,18 @@ namespace Application.Dtos
                                     string name,
                                     decimal basePrice,
                                     decimal taxAmount,
-                                    decimal? discountAmount,
+                                    decimal? universaldiscountAmount,
+                                    decimal? upcDiscountAmount,
+                                    decimal? totalDiscountAmount,
                                     decimal calculatedPrice)
         {
             Upc = upc;
             Name = name;
             BasePrice = basePrice;
             TaxAmount = taxAmount;
-            DiscountAmount = discountAmount;
+            UniversalDiscountAmount = universaldiscountAmount;
+            UpcDiscountAmount = upcDiscountAmount;
+            TotalDiscountAmount = totalDiscountAmount;
             CalculatedPrice = calculatedPrice;
         }
 
@@ -25,7 +29,9 @@ namespace Application.Dtos
         public string Name { get; }
         public decimal BasePrice { get; }
         public decimal TaxAmount { get; }
-        public decimal? DiscountAmount { get; }
+        public decimal? UniversalDiscountAmount { get; }
+        public decimal? UpcDiscountAmount { get; }
+        public decimal? TotalDiscountAmount { get; }
         public decimal CalculatedPrice { get; }
     }
 }
